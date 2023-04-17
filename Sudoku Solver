@@ -1,0 +1,177 @@
+Given an incomplete Sudoku configuration in terms of a 9 x 9  2-D square matrix (grid[][]), the task to find a solved Sudoku. For simplicity, you may assume that there will be only one unique solution.
+
+A sudoku solution must satisfy all of the following rules:
+
+Each of the digits 1-9 must occur exactly once in each row.
+Each of the digits 1-9 must occur exactly once in each column.
+Each of the digits 1-9 must occur exactly once in each of the 9 3x3 sub-boxes of the grid.
+
+Sample Sudoku for you to get the logic for its solution:
+
+
+
+
+Example 1:
+
+Input:
+grid[][] = 
+[[3 0 6 5 0 8 4 0 0],
+[5 2 0 0 0 0 0 0 0],
+[0 8 7 0 0 0 0 3 1 ],
+[0 0 3 0 1 0 0 8 0],
+[9 0 0 8 6 3 0 0 5],
+[0 5 0 0 9 0 6 0 0],
+[1 3 0 0 0 0 2 5 0],
+[0 0 0 0 0 0 0 7 4],
+[0 0 5 2 0 6 3 0 0]]
+Output:
+3 1 6 5 7 8 4 9 2
+5 2 9 1 3 4 7 6 8
+4 8 7 6 2 9 5 3 1
+2 6 3 4 1 5 9 8 7
+9 7 4 8 6 3 1 2 5
+8 5 1 7 9 2 6 4 3
+1 3 8 9 4 7 2 5 6
+6 9 2 3 5 1 8 7 4
+7 4 5 2 8 6 3 1 9
+
+Your Task:
+You need to complete the two functions:
+SolveSudoku(): Takes a grid as its argument and returns true if a solution is possible and false if it is not.
+printGrid(): Takes a grid as its argument and prints the 81 numbers of the solved Sudoku in a single line with space separation.
+NOTE: Do not give a new line character after printing the grid. It has already been taken care of in the Driver Code.
+
+
+Expected Time Complexity: O(9N*N).
+Expected Auxiliary Space: O(N*N).
+
+
+Constraints:
+0 ≤ grid[i][j] ≤ 9
+____________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________
+//{ Driver Code Starts
+//Initial Template for Java
+
+import java.util.*;
+import java.io.*;
+import java.lang.*;
+
+class Driver_class
+{
+    public static void main(String args[])
+    {
+        
+        Scanner sc = new Scanner(System.in);
+        int t = sc.nextInt();
+        
+        while(t-- > 0)
+        {
+            int grid[][] = new int[9][9];
+            for(int i = 0; i < 9; i++)
+            {
+                for(int j = 0; j < 9; j++)
+                grid[i][j] = sc.nextInt();
+            }
+            
+            Solution ob = new Solution();
+            
+            if(ob.SolveSudoku(grid) == true)
+                ob.printGrid(grid);
+            else
+                System.out.print("NO solution exists");
+            System.out.println();
+            
+        }
+    }
+}
+
+
+
+
+// } Driver Code Ends
+
+
+//Simplified java solution 
+
+ 
+
+class Solution
+{
+    //Function to find a solved Sudoku.
+    static boolean SolveSudoku(int grid[][])
+    {
+        //to traverse in 2d matrix
+           for(int i=0;i<9;i++){
+               for(int j=0;j<9;j++){
+
+                   //now we check if ever if encounter a empty bracket
+                   if(grid[i][j]==0){
+
+                       //so now like we will try for all possible values from 1-9
+                       for(int k=1;k<=9;k++){
+                           //to check if it is valid to put a ch 1-9 here
+                           if(isValid(grid,i,j,k)){
+                               
+                               //making fill the empty with k if valid
+                               grid[i][j] = k;
+
+                                      //recursive call and return true if all good
+                                  if (SolveSudoku(grid))
+                                    return true;
+                               
+                               //else backtrack
+                               else
+                                   grid[i][j]=0;
+                               
+                           }
+
+                       }
+                       //if we still cant fill the empty blocks return false
+                       return false;
+                   }
+                         
+               }
+           }
+                    //if we never encounter any 0 brackets then also return true;
+        return true;
+
+    }
+
+
+    static boolean isValid(int grid[][],int row ,int col,int k){
+
+        //how to check it is valid with 3 conditons
+
+        for(int i=0;i<9;i++){
+
+            //for row then only row will be static and col keep on increasing
+            if(grid[row][i]==k) return false;
+
+            if(grid[i][col]==k) return false;
+
+
+             //special formula
+             if (grid[3 * (row / 3) + i / 3][3 * (col / 3) + i % 3] == k)
+        return false;
+        }
+        return true;
+
+    }
+
+    //Function to print grids of the Sudoku.
+    static void printGrid (int grid[][])
+    {
+        // add your code here
+         // add your code here
+
+        for(int i=0;i<grid.length;i++){
+
+            for(int j=0;j<grid.length;j++){
+
+                System.out.print(grid[i][j]+" ");
+
+            }
+
+        }
+    }
+}
